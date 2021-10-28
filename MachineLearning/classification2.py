@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error as mse, mean_absolute_error, roc_
 
 def classification2():
 
-    st.markdown('Deaths')
+    st.markdown('# Daily Deaths Classification')
 
     final_merged_malaysia = pd.read_csv('Dataset/final_merged_malaysia.csv')
 
@@ -91,9 +91,12 @@ def classification2():
                             'hosp_discharged_total']
 
     X_RFE_deaths = X_RFE_deaths[strong_features_deaths].copy()
+
+    st.markdown('## Before SMOTE')
+
+    st.write('Table below shows the number of records for each category of deaths (Low, Medium, High).')
     st.write(y_RFE_deaths.value_counts())
 
-    st.markdown('#Before SMOTE')
     X_train, X_test, y_train, y_test = train_test_split(X_RFE_deaths, y_RFE_deaths, test_size=0.3, random_state=1)
 
     st.markdown('** LGBM Classifier **')
@@ -101,7 +104,7 @@ def classification2():
     # Confusion Matrix
     lgbm = pickle.load(open('Model/lgbm_deaths_1', 'rb'))
     y_pred_lgbm  = lgbm.predict(X_test)
-    st.write(classification_report(y_test, y_pred_lgbm))
+    st.text('Model Report:\n ' + classification_report(y_test, y_pred_lgbm))
 
     fig1,ax1 = plt.subplots(figsize = (20,10))
     ax1.set_title("Confusion Matrix for LGBM Classifier")
@@ -110,13 +113,13 @@ def classification2():
     lgbm_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax1)
     st.pyplot(fig1)
     
-    st.markdown('The first graph above shows the confusion matrix for the LGBM Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels.')
+    st.markdown('The first plot above shows the confusion matrix for the LGBM Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” label because of the imbalanced deaths data.')
 
     rfc = pickle.load(open('Model/rfc_deaths_1', 'rb'))
     y_pred_rfc = rfc.predict(X_test)
     
     st.markdown('** Random Forest Classifier **')
-    st.write(classification_report(y_test, y_pred_rfc))
+    st.text('Model Report:\n ' + classification_report(y_test, y_pred_rfc))
 
     fig2,ax2 = plt.subplots(figsize = (20,10))
     ax2.set_title("Confusion Matrix for Random Forest Classifier")
@@ -125,7 +128,7 @@ def classification2():
     rfc_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax2)
     st.pyplot(fig2)
 
-    st.markdown('The second graph above shows the confusion matrix for the Random Forest Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels. This classifier has a similar accuracy with the LGBM classifier but the f1-score of this classifier is better than LGBM Classifier in overall. ')
+    st.markdown('The second plot above shows the confusion matrix for the Random Forest Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” label because of the imbalanced deaths data. This classifier has a similar accuracy with the LGBM classifier but the f1-score of this classifier is worse than LGBM Classifier in "High" label. ')
  
 
 
@@ -137,8 +140,12 @@ def classification2():
 
 
 
-    st.markdown('#After SMOTE')
+    st.markdown('## After SMOTE')
     X_resampled, y_resampled = SMOTE(k_neighbors=4).fit_resample(X_RFE_deaths, y_RFE_deaths)
+
+    st.write('Table below shows the number of records for each category of deaths (Low, Medium, High).')
+    st.write(y_resampled.value_counts())
+
     X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3, random_state=1)
 
     st.markdown('** LGBM Classifier **')
@@ -146,7 +153,7 @@ def classification2():
     # Confusion Matrix
     lgbm = pickle.load(open('Model/lgbm_deaths_2', 'rb'))
     y_pred_lgbm  = lgbm.predict(X_test)
-    st.write(classification_report(y_test, y_pred_lgbm))
+    st.text('Model Report:\n ' + classification_report(y_test, y_pred_lgbm))
 
     fig1,ax1 = plt.subplots(figsize = (20,10))
     ax1.set_title("Confusion Matrix for LGBM Classifier")
@@ -155,13 +162,13 @@ def classification2():
     lgbm_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax1)
     st.pyplot(fig1)
     
-    st.markdown('The first graph above shows the confusion matrix for the LGBM Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels.')
+    st.markdown('The first plot above shows the confusion matrix for the LGBM Classifier trained and tested on oversampled dataset. This classifier has high accuracy for all three labels but with few wrong predictions.')
 
     rfc = pickle.load(open('Model/rfc_deaths_2', 'rb'))
     y_pred_rfc = rfc.predict(X_test)
     
     st.markdown('** Random Forest Classifier **')
-    st.write(classification_report(y_test, y_pred_rfc))
+    st.text('Model Report:\n ' + classification_report(y_test, y_pred_rfc))
 
     fig2,ax2 = plt.subplots(figsize = (20,10))
     ax2.set_title("Confusion Matrix for Random Forest Classifier")
@@ -170,5 +177,5 @@ def classification2():
     rfc_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax2)
     st.pyplot(fig2)
 
-    st.markdown('The second graph above shows the confusion matrix for the Random Forest Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels. This classifier has a similar accuracy with the LGBM classifier but the f1-score of this classifier is better than LGBM Classifier in overall. ')
+    st.markdown('The second plot above shows the confusion matrix for the Random Forest Classifier trained and tested on oversampled dataset. This classifier has high accuracy for all three labels but with few wrong predictions. This classifier has a similar accuracy with the LGBM classifier but the f1-score of this classifier is worse than LGBM Classifier in overall. In overall, the performance of the models trained and tested on oversampled dataset are better than the previous models. Hence, performing oversampling on this imbalance deaths data does improve the performance of models in overall.')
  

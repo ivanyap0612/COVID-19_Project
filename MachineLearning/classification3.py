@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error as mse, mean_absolute_error, roc_
 
 def classification3():
 
-    st.markdown('States')
+    st.markdown('# State prediction')
 
     final_merged_state = pd.read_csv('Dataset/final_merged_state.csv')
 
@@ -76,9 +76,10 @@ def classification3():
                             'daily_partial']
 
     X_RFE_state = X_RFE_state[strong_features_state].copy()
+
+    st.write('Table below shows the number of records for each state. The dataset is balanced, hence SMOTE is not performed.')
     st.write(y_RFE_state.value_counts())
 
-    st.markdown('#Before SMOTE')
     X_train, X_test, y_train, y_test = train_test_split(X_RFE_state, y_RFE_state, test_size=0.3, random_state=1)
 
     st.markdown('** LGBM Classifier **')
@@ -86,7 +87,7 @@ def classification3():
     # Confusion Matrix
     lgbm = pickle.load(open('Model/lgbm_state_1', 'rb'))
     y_pred_lgbm  = lgbm.predict(X_test)
-    st.write(classification_report(y_test, y_pred_lgbm))
+    st.text('Model Report:\n ' + classification_report(y_test, y_pred_lgbm))
 
     fig1,ax1 = plt.subplots(figsize = (20,10))
     ax1.set_title("Confusion Matrix for LGBM Classifier")
@@ -95,13 +96,13 @@ def classification3():
     lgbm_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax1)
     st.pyplot(fig1)
     
-    st.markdown('The first graph above shows the confusion matrix for the LGBM Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels.')
+    st.markdown('The first plot above shows the confusion matrix for the LGBM Classifier. This classifier has high accuracy of classifying state based on Covid data.')
 
     rfc = pickle.load(open('Model/rfc_state_1', 'rb'))
     y_pred_rfc = rfc.predict(X_test)
     
     st.markdown('** Random Forest Classifier **')
-    st.write(classification_report(y_test, y_pred_rfc))
+    st.text('Model Report:\n ' + classification_report(y_test, y_pred_rfc))
 
     fig2,ax2 = plt.subplots(figsize = (20,10))
     ax2.set_title("Confusion Matrix for Random Forest Classifier")
@@ -110,50 +111,5 @@ def classification3():
     rfc_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax2)
     st.pyplot(fig2)
 
-    st.markdown('The second graph above shows the confusion matrix for the Random Forest Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels. This classifier has a similar accuracy with the LGBM classifier but the f1-score of this classifier is better than LGBM Classifier in overall. ')
+    st.markdown('The second plot above shows the confusion matrix for the Random Forest Classifier. This classifier also has high accuracy of classifying state based on Covid data. This classifier has a similar accuracy with the LGBM Classifier. ')
 
-
-
-
-
-
-
-
-
-
-
-
-    st.markdown('#After SMOTE')
-    X_resampled, y_resampled = SMOTE().fit_resample(X_RFE_state, y_RFE_state)
-    X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3, random_state=1)
-
-    st.markdown('** LGBM Classifier **')
-
-    # Confusion Matrix
-    lgbm = pickle.load(open('Model/lgbm_state_2', 'rb'))
-    y_pred_lgbm  = lgbm.predict(X_test)
-    st.write(classification_report(y_test, y_pred_lgbm))
-
-    fig1,ax1 = plt.subplots(figsize = (20,10))
-    ax1.set_title("Confusion Matrix for LGBM Classifier")
-    conf_matrix_lgbm = confusion_matrix(y_test, y_pred_lgbm)
-    lgbm_display = ConfusionMatrixDisplay(confusion_matrix=conf_matrix_lgbm,display_labels = lgbm.classes_)
-    lgbm_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax1)
-    st.pyplot(fig1)
-    
-    st.markdown('The first graph above shows the confusion matrix for the LGBM Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels.')
-
-    rfc = pickle.load(open('Model/rfc_state_2', 'rb'))
-    y_pred_rfc = rfc.predict(X_test)
-    
-    st.markdown('** Random Forest Classifier **')
-    st.write(classification_report(y_test, y_pred_rfc))
-
-    fig2,ax2 = plt.subplots(figsize = (20,10))
-    ax2.set_title("Confusion Matrix for Random Forest Classifier")
-    conf_matrix_rfc = confusion_matrix(y_test, y_pred_rfc)
-    rfc_display = ConfusionMatrixDisplay(confusion_matrix=conf_matrix_rfc,display_labels = rfc.classes_)
-    rfc_display.plot(cmap = 'Greens',xticks_rotation ='vertical',ax=ax2)
-    st.pyplot(fig2)
-
-    st.markdown('The second graph above shows the confusion matrix for the Random Forest Classifier. This classifier has high accuracy for “low” and “medium” labels but has low accuracy for “high” labels. This classifier has a similar accuracy with the LGBM classifier but the f1-score of this classifier is better than LGBM Classifier in overall. ')
