@@ -35,7 +35,7 @@ def regression2():
     
 
     if selectModel == 'Autoregressive integrated moving average(ARIMA)':
-        st.markdown('********Autoregressive integrated moving average(ARIMA)********')
+        st.markdown('------Autoregressive integrated moving average(ARIMA)------')
         df_arima_reg2 = df_cases_reg2.copy()
         train_arima_reg2 = df_arima_reg2[:615]
         test_arima_reg2 = df_arima_reg2[615:]
@@ -48,7 +48,9 @@ def regression2():
         fc_series = pd.Series(fc, index=test_arima_reg2.index)
         lower_series = pd.Series(conf[:, 0], index=test_arima_reg2.index)
         upper_series = pd.Series(conf[:, 1], index=test_arima_reg2.index)
-
+        
+        st.markdown('********Out-of-Time cross-validation********')
+        st.markdown('In Out-of-Time cross-validation, few steps back in time and forecast into the future to as many steps you took back. Then you compare the forecast against the actuals.')
         # Plot for Model Validation
         plt.figure(figsize=(12,5), dpi=100)
         plt.plot(train_arima_reg2, label='training')
@@ -133,7 +135,7 @@ def regression2():
         st.text("")
 
     else:
-        st.markdown('********FBProphet********')
+        st.markdown('------FBProphet------')
         df_prophet_reg2 = cases_malaysia[['date','cases_new']]
         #filter for year 2021
         df_prophet_reg2 = df_prophet_reg2[df_prophet_reg2['date'] > '2020-12-31']
