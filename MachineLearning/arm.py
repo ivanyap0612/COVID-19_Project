@@ -14,7 +14,7 @@ def arm():
     df = itemsets[['COVID-19' in i for i in itemsets['itemsets']]].sort_values('support', ascending=False).reset_index(drop=True)
     st.table(df)
 
-    st.markdown('Table above shows the rules and their statistics of the symptoms of COVID-19. The threshold is set to 0.9 so that it filtered out only the COVID-19 as consequents.')
+    st.markdown('Table below shows the rules and their statistics of the symptoms of COVID-19. The threshold is set to 0.9 so that it filtered out only the COVID-19 as consequents.')
 
     rules = association_rules(itemsets, min_threshold=0.9)
     rules = rules.applymap(lambda x: list(x) if isinstance(x, frozenset) else x )
