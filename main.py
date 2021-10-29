@@ -2,19 +2,12 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import altair as alt 
-from DatasetAnalysis import cases_state 
-from DatasetAnalysis import tests_state
-from DatasetAnalysis import death_state
-from DatasetAnalysis import population
-from DatasetAnalysis import pkrc
-from DatasetAnalysis import hospital
-from DatasetAnalysis import icu
-from DatasetAnalysis import vaccination
-from Findings import finding1, finding2, finding6, finding7
+from DatasetAnalysis import cases_state,tests_state,death_state,population,pkrc,hospital,icu,vaccination
+from Findings import finding1, finding2, finding4, finding5, finding6, finding7
 from FeatureSelection import boruta, rfe
-from MachineLearning import classification1, classification2, classification3, arm
+from MachineLearning import regression2, classification1, classification2, classification3, arm
 
-selectType = st.sidebar.radio('Select a Question to View', ('Datasets','Critical Findings','Feature Selection','Machine Learning Approaches'))
+selectType = st.sidebar.radio('Select a Question to View', ('Datasets','Project Findings','Feature Selection','Machine Learning Approaches'))
 st.sidebar.markdown('# ')
 st.sidebar.markdown('# ')
 st.sidebar.markdown('# ')
@@ -46,7 +39,7 @@ if selectType == 'Datasets':
     else:
         vaccination.vax()
 
-elif selectType == 'Critical Findings':
+elif selectType == 'Project Findings':
 
     selectFindings = st.selectbox("Select Findings", ['Finding 1','Finding 2','Finding 3','Finding 4','Finding 5','Finding 6', 'Finding 7', 'Finding 8'])
     if selectFindings == 'Finding 1':
@@ -59,8 +52,10 @@ elif selectType == 'Critical Findings':
         st.markdown('## Is there any correlation between vaccination and daily cases for Selangor, Sabah, Sarawak, and many more?')
     elif selectFindings == 'Finding 4':
         st.markdown('## Has vaccination helped reduce the daily cases? What states have shown the effect of vaccination? ')
+        finding4.finding4()
     elif selectFindings == 'Finding 5':
         st.markdown('## Does the child vaccination rate have any effects on the daily cases of Malaysia?')
+        finding5.finding5()
     elif selectFindings == 'Finding 6':
         st.markdown('## Which states have the highest vaccination rate?')
         finding6.finding6()
@@ -89,6 +84,7 @@ else:
         st.markdown('## Does the current vaccination rate allow herd immunity to be achieved by 30 November 2021? Assumed that herd immunity can be achieved with 80% of population has been vaccinated')
     elif selectML == 'Regression 2':
         st.markdown('## When will the total number of COVID-19 cases drop below 1000 cases per day?')
+        regression2.regression2()
     elif selectML == 'Classification 1':
         st.markdown('##')
         classification1.classification1()
