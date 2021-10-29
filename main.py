@@ -2,10 +2,10 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import altair as alt 
-from DatasetAnalysis import cases_state,tests_state,death_state,population,pkrc,hospital,icu,vaccination
-from Findings import finding1, finding2, finding4, finding5, finding6, finding7
-from FeatureSelection import boruta, rfe
-from MachineLearning import regression2, classification1, classification2, classification3, arm
+from DatasetAnalysis import cases_my,cases_state,tests_my,tests_state,death_state,population,pkrc,hospital,icu,vaccination
+from Findings import finding1, finding2, finding3, finding4, finding5, finding6, finding7, finding8
+from FeatureSelection import boruta, rfe, lasso
+from MachineLearning import regression2, classification1, classification2, classification3, arm, clustering
 
 selectType = st.sidebar.radio('Select a Question to View', ('Datasets','Project Findings','Feature Selection','Machine Learning Approaches'))
 st.sidebar.markdown('# ')
@@ -20,11 +20,15 @@ st.sidebar.markdown('Aw Yew Lim - 1171103827')
 
 if selectType == 'Datasets':
     
-    selectDatasets = st.selectbox("Select Datasets", ['Cases','Tests','Deaths','Population','PKRC','Hospital','ICU','Vaccination'])
+    selectDatasets = st.selectbox("Select Datasets", ['Cases-Malaysia','Cases-States','Tests-Malaysia','Tests-State','Deaths','Population','PKRC','Hospital','ICU','Vaccination'])
    
-    if selectDatasets == 'Cases':
+    if selectDatasets == 'Cases-Malaysia':
+        cases_my.cases_my()
+    elif selectDatasets == 'Cases-States':
         cases_state.cases_state()
-    elif selectDatasets == 'Tests':
+    elif selectDatasets == 'Tests-Malaysia':
+        tests_my.tests_my()
+    elif selectDatasets == 'Tests-State':
         tests_state.tests_state()
     elif selectDatasets == 'Deaths':
         death_state.death_state()
@@ -50,6 +54,7 @@ elif selectType == 'Project Findings':
         finding2.finding2()
     elif selectFindings == 'Finding 3':
         st.markdown('## Is there any correlation between vaccination and daily cases for Selangor, Sabah, Sarawak, and many more?')
+        finding3.finding3()
     elif selectFindings == 'Finding 4':
         st.markdown('## Has vaccination helped reduce the daily cases? What states have shown the effect of vaccination? ')
         finding4.finding4()
@@ -63,7 +68,8 @@ elif selectType == 'Project Findings':
         st.markdown('## What state(s) require attention now?')
         finding7.finding7()
     else:
-        st.markdown('## Does the National Recovery Plan have any effects on the daily cases for Selangor, Kuala Lumpur, Melaka?')
+        st.markdown('## Does the National Recovery Plan have any effects on the daily cases for Kedah, Perak, Selangor and Negeri Sembilan?')
+        finding8.finding8()
   
 elif selectType == 'Feature Selection':
     selectFeature = st.selectbox("Feature Selection", ['Boruta','Lasso','Recursive feature elimination (RFE)'])
@@ -71,7 +77,7 @@ elif selectType == 'Feature Selection':
     if selectFeature == 'Boruta':
         boruta.boruta()
     elif selectFeature == 'Lasso':
-        st.markdown('##')
+        lasso.lasso()
     elif selectFeature == 'Recursive feature elimination (RFE)':
         rfe.rfe()
     else:
@@ -99,3 +105,4 @@ else:
         arm.arm()
     else:
         st.markdown('##')
+        clustering.clustering()
