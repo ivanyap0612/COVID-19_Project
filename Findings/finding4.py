@@ -49,4 +49,4 @@ def finding4():
         plt.ylabel('Number of New COVID-19 Cases')
         st.pyplot(plt)
         
-        st.markdown('Based on the graph above, it can be seen that total number of new COVID-19 cases for every state has started to drop after a certain number of vaccinated people has been reached. This has proven that vaccine is effective against COVID-19 and helps to reduce the number of COVID-19 cases for every state.')
+        st.markdown('Based on the graph above, it can be seen that total number of new COVID-19 cases for every state has started to drop after a certain number of vaccinated people has been reached. Besides, every state has shown that vaccination has helped to reduce the daily cases after some times. This has proven that vaccine is effective against COVID-19.')
