@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import altair as alt 
-from DatasetAnalysis import cases_my,cases_state,tests_my,tests_state,death_state,population,pkrc,hospital,icu,vaccination
+from DatasetAnalysis import cases_my,cases_state,tests_my,tests_state,death_my,death_state,population,pkrc,hospital,icu,vaccination_state,vaccination_malaysia
 from Findings import finding1, finding2, finding3, finding4, finding5, finding6, finding7, finding8
 from FeatureSelection import boruta, rfe, lasso
 from MachineLearning import regression2, classification1, classification2, classification3, arm, clustering
@@ -20,7 +20,7 @@ st.sidebar.markdown('Aw Yew Lim - 1171103827')
 
 if selectType == 'Datasets':
     
-    selectDatasets = st.selectbox("Select Datasets", ['Cases-Malaysia','Cases-States','Tests-Malaysia','Tests-State','Deaths','Population','PKRC','Hospital','ICU','Vaccination'])
+    selectDatasets = st.selectbox("Select Datasets", ['Cases-Malaysia','Cases-States','Tests-Malaysia','Tests-State','Deaths-Malaysia','Deaths-States','Population','PKRC','Hospital','ICU','Vaccination-Malaysia','Vaccination-States'])
    
     if selectDatasets == 'Cases-Malaysia':
         cases_my.cases_my()
@@ -30,7 +30,9 @@ if selectType == 'Datasets':
         tests_my.tests_my()
     elif selectDatasets == 'Tests-State':
         tests_state.tests_state()
-    elif selectDatasets == 'Deaths':
+    elif selectDatasets == 'Deaths-Malaysia':
+        death_my.death_my()
+    elif selectDatasets == 'Deaths-States':
         death_state.death_state()
     elif selectDatasets == 'Population':
         population.population()
@@ -40,8 +42,10 @@ if selectType == 'Datasets':
         hospital.hospital()
     elif selectDatasets == 'ICU':
         icu.icu()
+    elif selectDatasets == 'Vaccination-Malaysia':
+        vaccination_malaysia.vax_my()
     else:
-        vaccination.vax()
+        vaccination_state.vax_state()
 
 elif selectType == 'Project Findings':
 
