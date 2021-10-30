@@ -37,12 +37,12 @@ def regression2():
     if selectModel == 'Autoregressive integrated moving average(ARIMA)':
         st.markdown('------Autoregressive integrated moving average(ARIMA)------')
         df_arima_reg2 = df_cases_reg2.copy()
-        train_arima_reg2 = df_arima_reg2[:615]
-        test_arima_reg2 = df_arima_reg2[615:]
+        train_arima_reg2 = df_arima_reg2[:635]
+        test_arima_reg2 = df_arima_reg2[635:]
         #load arima model
         model_arima_reg2 = pickle.load(open('Model/arima_cases', 'rb'))
         # Forecast
-        fc, conf = model_arima_reg2.predict(25, return_conf_int=True)  # 95% conf
+        fc, conf = model_arima_reg2.predict(5, return_conf_int=True)  # 95% conf
 
         # Make as pandas series
         fc_series = pd.Series(fc, index=test_arima_reg2.index)
@@ -131,7 +131,7 @@ def regression2():
         plt.title("Forecast for the Total Number of COVID-19 Cases Drop below 1000 Cases per day")
         st.pyplot(plt)
 
-        st.markdown('The total number of COVID-19 cases will drop below 1000 cases per day on 2021-11-02.')
+        st.markdown('The total number of COVID-19 cases will drop below 1000 cases per day on 2021-11-07.')
         st.text("")
 
     else:
@@ -142,12 +142,57 @@ def regression2():
         # prepare expected column names
         df_prophet_reg2.columns = ['ds', 'y']
         df_prophet_reg2['ds']= pd.to_datetime(df_prophet_reg2['ds'])
+        #create train and test dataset
+        train_regq2_2 = df_prophet_reg2[:293].copy()
+        test_regq2_2 = df_prophet_reg2[293:].copy()
         #load prophet model
         model_prophet_reg2 = pickle.load(open('Model/prophet_cases', 'rb'))
+        #Test performance
+        test_future_dates = model_prophet_reg2.make_future_dataframe(periods=5)
+        test_forecast = model_prophet_reg2.predict(test_future_dates)
+        test_yhat_q2 = test_forecast['yhat']
+        test_yhat_q2 = test_yhat_q2[293:]
+        
+        def forecast_accuracy2(forecast, actual):
+            mape = np.mean(np.abs(forecast - actual)/np.abs(actual))  # MAPE
+            me = np.mean(forecast - actual)             # ME
+            mae = np.mean(np.abs(forecast - actual))    # MAE
+            mpe = np.mean((forecast - actual)/actual)   # MPE
+            rmse = np.mean((forecast - actual)**2)**.5  # RMSE
+            corr = np.corrcoef(forecast, actual)[0,1]   # corr
+            mins = np.amin(np.hstack([forecast[:,None], 
+                                    actual[:,None]]), axis=1)
+            maxs = np.amax(np.hstack([forecast[:,None], 
+                                    actual[:,None]]), axis=1)
+            minmax = 1 - np.mean(mins/maxs)             # minmax
+            acf1 = acf(test_yhat_q2-test_regq2_2['y'].values)[1]   # ACF1  
+            return (mape,me,mae,mpe,rmse,corr,minmax,acf1)
+            
+        (mape2,me2,mae2,mpe2,rmse2,corr2,minmax2,acf1) = forecast_accuracy2(test_yhat_q2, test_regq2_2['y'].values)
+      
+        ##Printing Table
+        st.text("")
+        st.markdown('********FBProphet Evaluation Metrics Score********')
+        st.markdown('Evaluation Metrics: \n- Mean Absolute Percentage Error (MAPE)\n- Mean Error (ME)\n- Mean Absolute Error (MAE)\n- Mean Percentage Error (MPE)\n- Root Mean Squared Error (RMSE)\n- Lag 1 Autocorrelation of Error (ACF1)\n- Correlation between the Actual and the Forecast (corr)\n- Min-Max Error (minmax)')
+        table2 = go.Figure(data=[go.Table(
+        columnwidth=[1, 4],
+        header=dict(values=['Metrics', 'Value'],
+                    fill=dict(color=['paleturquoise']),
+                    align='center',height=30),
+        cells=dict(values=[['MAPE','ME','MAE','MPE','RMSE','corr','minmax','ACF1'],
+                        [str(mape2),str(me2), str(mae2), str(mpe2), str(rmse2), str(corr2), str(minmax2), str(acf1)]],
+                fill=dict(color=['lightcyan']),
+                align='center',height=30))
+        ])
+        table2 = table2.update_layout(width=400,height=200, margin=dict(l=0,r=10,t=5,b=0))
+        st.write(table2)
+        st.text("")
+        st.markdown('********Forecasting for the Total Number of COVID-19 Cases Drop below 1000 Cases per day********')
+
         future_dates = model_prophet_reg2.make_future_dataframe(periods=365)
         forecast = model_prophet_reg2.predict(future_dates)
         model_prophet_reg2.plot(forecast)
         plt.ylim(0,30000)
         st.pyplot(plt)
         below_1000 = (forecast['yhat']<1000) & (forecast['ds']>'2021-10-20')
-        st.markdown('The total number of COVID-19 cases drop below 1000 cases per day on 2021-11-08')
+        st.markdown('The total number of COVID-19 cases drop below 1000 cases per day on 2021-11-14')
