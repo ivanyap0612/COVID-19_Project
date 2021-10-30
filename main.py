@@ -5,7 +5,7 @@ import altair as alt
 from DatasetAnalysis import cases_my,cases_state,tests_my,tests_state,death_my,death_state,population,pkrc,hospital,icu,vaccination_state,vaccination_malaysia
 from Findings import finding1, finding2, finding3, finding4, finding5, finding6, finding7, finding8
 from FeatureSelection import boruta, rfe, lasso
-from MachineLearning import regression2, classification1, classification2, classification3, arm, clustering
+from MachineLearning import regression1, regression2, classification1, classification2, classification3, arm, clustering
 
 selectType = st.sidebar.radio('Select a Question to View', ('Datasets','Project Findings','Feature Selection','Machine Learning Approaches'))
 st.sidebar.markdown('# ')
@@ -92,6 +92,7 @@ else:
 
     if selectML == 'Regression 1':
         st.markdown('## Does the current vaccination rate allow herd immunity to be achieved by 30 November 2021? Assumed that herd immunity can be achieved with 80% of population has been vaccinated')
+        regression1.regression1()
     elif selectML == 'Regression 2':
         st.markdown('## When will the total number of COVID-19 cases drop below 1000 cases per day?')
         regression2.regression2()
