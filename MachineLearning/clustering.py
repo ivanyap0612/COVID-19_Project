@@ -21,7 +21,7 @@ def clustering():
     st.pyplot(plt)
 
     clustering_X = clustering.drop(['date'], axis=1)
-    km = KMeans(n_clusters=5, random_state=1).fit(clustering_X)
+    km = KMeans(n_clusters=6, random_state=1).fit(clustering_X)
     clustering_new = clustering.copy()
     clustering_new['cluster']=km.labels_
 
