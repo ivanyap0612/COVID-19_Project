@@ -30,4 +30,4 @@ def clustering():
     sns.scatterplot(x='cases_new', y='deaths_new', hue='cluster', data=clustering_new, palette="hls")
     st.pyplot(plt)
 
-    st.markdown('From the graph above, we can know there are 5 different clusters of COVID-19 cases in Malaysia. This shows that there are 5 different levels of COVID-19 in Malaysia from the least serious to most serious day.')
+    st.markdown('From the graph above, we can know there are 6 different clusters of COVID-19 cases in Malaysia. This shows that there are 6 different levels of COVID-19 in Malaysia from the least serious to most serious day.')
