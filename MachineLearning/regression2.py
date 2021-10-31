@@ -60,6 +60,8 @@ def regression2():
         plt.fill_between(lower_series.index, lower_series, upper_series, 
                         color='k', alpha=.15)
         plt.title('Forecast vs Actuals')
+        plt.xlabel('Date')
+        plt.ylabel('COVID-19 Cases') 
         plt.legend(loc='upper left', fontsize=10)
         st.pyplot(plt)
         plt.clf()
@@ -129,6 +131,8 @@ def regression2():
                         upper_series, 
                         color='k', alpha=.15)
         plt.legend(loc='upper left', fontsize=15)
+        plt.xlabel('Date')
+        plt.ylabel('COVID-19 Cases') 
         plt.title("Forecast for the Total Number of COVID-19 Cases Drop below 1000 Cases per day")
         st.pyplot(plt)
 
