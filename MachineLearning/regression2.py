@@ -131,7 +131,6 @@ def regression2():
                         upper_series, 
                         color='k', alpha=.15)
         plt.legend(loc='upper left', fontsize=15)
-        plt.xlabel('Date')
         plt.ylabel('COVID-19 Cases') 
         plt.title("Forecast for the Total Number of COVID-19 Cases Drop below 1000 Cases per day")
         st.pyplot(plt)
@@ -198,6 +197,9 @@ def regression2():
         forecast = model_prophet_reg2.predict(future_dates)
         model_prophet_reg2.plot(forecast)
         plt.ylim(0,30000)
+        plt.title("Forecast for the Total Number of COVID-19 Cases Drop below 1000 Cases per day")
+        plt.xlabel('Date')
+        plt.ylabel('COVID-19 Cases') 
         st.pyplot(plt)
         below_1000 = (forecast['yhat']<1000) & (forecast['ds']>'2021-10-20')
         st.markdown('The total number of COVID-19 cases drop below 1000 cases per day on 2021-11-14')
