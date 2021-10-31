@@ -28,6 +28,7 @@ def regression2():
     filter = ['cluster_import','cluster_religious','cluster_community','cluster_highRisk','cluster_education','cluster_detentionCentre','cluster_workplace']
     cases_malaysia[filter] = cases_malaysia[filter].astype(int)
     df_cases_reg2 = cases_malaysia[['date','cases_new']]
+    df_cases_reg2 = df_cases_reg2[df_cases_reg2['date'] > '2020-12-31']
     df_cases_reg2['date'] = pd.to_datetime(df_cases_reg2['date'])
     df_cases_reg2 = df_cases_reg2.set_index('date')
 
@@ -37,8 +38,8 @@ def regression2():
     if selectModel == 'Autoregressive integrated moving average(ARIMA)':
         st.markdown('------Autoregressive integrated moving average(ARIMA)------')
         df_arima_reg2 = df_cases_reg2.copy()
-        train_arima_reg2 = df_arima_reg2[:635]
-        test_arima_reg2 = df_arima_reg2[635:]
+        train_arima_reg2 = df_arima_reg2[:293]
+        test_arima_reg2 = df_arima_reg2[293:]
         #load arima model
         model_arima_reg2 = pickle.load(open('Model/arima_cases', 'rb'))
         # Forecast
