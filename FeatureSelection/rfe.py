@@ -14,11 +14,11 @@ def ranking(ranks, names, order=1):
     return dict(zip(names, ranks))
 
 def rfe():
-
-    # Cases
-
     final_merged_malaysia = pd.read_csv('Dataset/final_merged_malaysia.csv')
     final_merged_state = pd.read_csv('Dataset/final_merged_state.csv')
+
+    # Cases
+    st.markdown('### Cases')
     X_RFE_cases = final_merged_malaysia.drop(columns=['cases_new', 'date']).copy()
     y_RFE_cases = final_merged_malaysia['cases_new'].copy()
     y_RFE_cases = pd.cut(y_RFE_cases, 3, labels=['Low','Medium','High'])
@@ -41,7 +41,7 @@ def rfe():
     st.pyplot(sns_rfe_plot)
 
     # Deaths
-
+    st.markdown('### Deaths')
     X_RFE_deaths = final_merged_malaysia.drop(columns=['deaths_new', 'date']).copy()
     y_RFE_deaths = final_merged_malaysia['deaths_new'].copy()
     y_RFE_deaths = pd.cut(y_RFE_deaths, 3, labels=['Low','Medium','High'])
@@ -64,7 +64,7 @@ def rfe():
     st.pyplot(sns_rfe_plot)
 
     # State
-
+    st.markdown('### State')
     X_RFE_state = final_merged_state.drop(columns=['state', 'date']).copy()
     y_RFE_state = final_merged_state['state'].copy()
 
