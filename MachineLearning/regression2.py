@@ -133,8 +133,20 @@ def regression2():
         plt.legend(loc='upper left', fontsize=15)
         plt.ylabel('COVID-19 Cases') 
         plt.title("Forecast for the Total Number of COVID-19 Cases Drop below 1000 Cases per day")
+        plt.axhline(y=1000, color='r', linestyle='--',label='1000')
+        label_list = [
+            (310, 'Cases drop below 1000 starting on 2021-11-07', 'r'),
+        
+        ]
+        ax = plt.gca()
+        for date_point, label, clr in label_list:
+            plt.axvline(x=date_point, color=clr,linestyle='--')
+            plt.text(date_point, ax.get_ylim()[1]-4, label,
+                    horizontalalignment='center',
+                    verticalalignment='center',
+                    color=clr,
+                    bbox=dict(facecolor='white', alpha=0.9))
         st.pyplot(plt)
-
         st.markdown('The total number of COVID-19 cases will drop below 1000 cases per day on 2021-11-07.')
         st.text("")
 
@@ -200,6 +212,20 @@ def regression2():
         plt.title("Forecast for the Total Number of COVID-19 Cases Drop below 1000 Cases per day")
         plt.xlabel('Date')
         plt.ylabel('COVID-19 Cases') 
+        plt.axhline(y=1000, color='r', linestyle='--',label='1000')
+        label_list = [
+            (pd.to_datetime("2021-11-14"), 'Cases drop below 1000 starting on 2021-11-14', 'r'),
+        
+        ]
+        ax = plt.gca()
+        for date_point, label, clr in label_list:
+            plt.axvline(x=date_point, color=clr,linestyle='--')
+            plt.text(date_point, ax.get_ylim()[1]-4, label,
+                    horizontalalignment='center',
+                    verticalalignment='center',
+                    color=clr,
+                    bbox=dict(facecolor='white', alpha=0.9))
+        plt.legend()
         st.pyplot(plt)
-        below_1000 = (forecast['yhat']<1000) & (forecast['ds']>'2021-10-20')
+    
         st.markdown('The total number of COVID-19 cases drop below 1000 cases per day on 2021-11-14')
